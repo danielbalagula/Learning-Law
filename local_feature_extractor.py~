@@ -1,0 +1,29 @@
+import os
+import collections
+import nltk
+
+combined_cases_output_file_name = "combined_cases.txt"
+
+def generate_bag_of_words(text):
+	text = unicode(text, 'utf-8')
+	tokens = text.split()
+	#tokens = nltk.word_tokenize(text)
+	words = [word for word in tokens if word not in nltk.corpus.stopwords.words('english')]
+	resulting_count = collections.Counter(words)
+	print(resulting_count)
+
+paths = ["/no_verdict/", "/party1_won/", "/party2_won/"]
+
+for path in paths:
+	combined_cases_text = ""
+	path_dir = os.getcwd() + path
+	files = os.listdir(path_dir)
+	for file_in_dir in files:
+		if file_in_dir.endswith(".txt"):	
+			with open(path_dir + file_in_dir, "r") as file:
+				file_contents = file.read().lower()	
+				combined_cases_text += file_contents;
+	bag_of_words = generate_bag_of_words(combined_cases_text)
+	
+	with open(path_dir + combined_cases_output_file_name, "w") as file:
+		file.write(combined_cases)
