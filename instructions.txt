@@ -13,7 +13,7 @@
 	- sentence location/paragraph (http://jurix.nl/pdf/j04-05.pdf) <- Possibly very important/heavy weight
  	- # thematic words in a sentence (http://jurix.nl/pdf/j04-05.pdf)
 	- Length/%quotation/Entities (http://jurix.nl/pdf/j04-05.pdf)
-
+Z
 #train a model on the features with each label (scikit-learn)... this will be the local classifier
 
 #see results obtained from using just the local classifier on unlabeled instances... check each point, ask user, then retrain (active learning: http://aclweb.org/anthology/P/P14/P14-1104.pdf)

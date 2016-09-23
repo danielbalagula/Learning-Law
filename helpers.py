@@ -4,6 +4,7 @@ import operator
 
 from nltk.corpus import stopwords
 from nltk import word_tokenize
+from nltk.tokenize.punkt import PunktSentenceTokenizer, PunktParameters
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 
@@ -90,6 +91,13 @@ def adequateWord(word):
 	#checks to see if the word should be considered for data
 	return stringHasNumbers(word) == False and len(word) > 2
 
-def find_ngrams(input_list, n):
+def getNGrams(input_list, n):
 	#returns all the n-grams in a string length n
 	return zip(*[input_list[i:] for i in range(n)])
+
+def getSentences(text):
+	punkt_param = PunktParameters()
+	punkt_param.abbrev_types = set(['dr', 'vs', 'mr', 'mrs', 'prof', 'inc'])
+	sentence_splitter = PunktSentenceTokenizer(punkt_param)
+	sentences = sentence_splitter.tokenize(text)
+	return sentences
