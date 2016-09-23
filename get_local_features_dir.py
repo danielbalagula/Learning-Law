@@ -1,3 +1,10 @@
+#Current local features:
+	# partyMentionsCountWholeDocument: counts the number of times a party was mentioned in a file
+	# nGramsFirstParagraph: a list of all n-grams in the first paragraph in a document
+	# partyMentionsCountFirstParagraph: counts the number of times a party was mentioned in the first paragraph
+	# lastSentenceKeyWords: checks for the presence of keywords in the last sentence of the first paragraph
+	# appellee: the party that is appealing
+
 import os
 
 from first_paragraph_getter import getFirstParagraphsStopWordsRemoved
@@ -17,13 +24,6 @@ def getLocalFeaturesInDir(dir):
 			getLocalFeaturesInDoc(filename, textFile.read().decode("utf8").lower(), jsonFile.read().decode("utf8").lower())
 
 def getLocalFeaturesInDoc(originalFilename, textFile, jsonFile):
-	#Current local features:
-		# partyMentionsCountWholeDocument: counts the number of times a party was mentioned in a file
-		# nGramsFirstParagraph: a list of all n-grams in the first paragraph in a document
-		# partyMentionsCountFirstParagraph: counts the number of times a party was mentioned in the first paragraph
-		# lastSentenceKeyWords: checks for the presence of keywords in the last sentence of the first paragraph
-		# appellee: the party that is appealing
-		
 	#file output format
 	fileName, extension = os.path.splitext(originalFilename)
 	outputFileName = fileName + "_features.csv"
@@ -50,9 +50,11 @@ def getLocalFeaturesInDoc(originalFilename, textFile, jsonFile):
 		appellee = ""
 		for sentence in firstParagraphSentences:
 			if parties['party1'] in sentence and 'appeals' in sentence:
-				appellee = parties['party1']
+				appellee = 'party1'
+				break
 			elif parties['party2'] in sentence and 'appeals' in sentence:
-				appellee = parties['party2']
+				appellee = 'party2'
+				break
 		print fileName + " = " + appellee
 
 def getGlobalFeaturesInDir(dir):

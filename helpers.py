@@ -96,6 +96,7 @@ def getNGrams(input_list, n):
 	return zip(*[input_list[i:] for i in range(n)])
 
 def getSentences(text):
+	#returns a list of sentences tokenized by Punkt
 	punkt_param = PunktParameters()
 	punkt_param.abbrev_types = set(['dr', 'vs', 'mr', 'mrs', 'prof', 'inc'])
 	sentence_splitter = PunktSentenceTokenizer(punkt_param)

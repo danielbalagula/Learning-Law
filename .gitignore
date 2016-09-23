@@ -1,3 +1,9 @@
 unlabeled_cases
 venv
 appeals
+.pyc
+._instructions.txt
+._.DS_Store
+.DS_Store
+verdict_finder.py
+instructions.txt
