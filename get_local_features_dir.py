@@ -27,7 +27,8 @@ def getLocalFeaturesInDir(dir):
 			
 			features = getLocalFeaturesInDoc(filename, textFile.read().decode("utf8").lower(), jsonFile.read().decode("utf8").lower())
 			#outputs features to file
-			outputFileName = filename + "_features.json"
+			_fileName, extension = os.path.splitext(filename)
+			outputFileName = _fileName + "_features.json"
 			outputFile = open(dir+'features/'+outputFileName, "w")
 			outputFile.write(features)
 			outputFile.close()
