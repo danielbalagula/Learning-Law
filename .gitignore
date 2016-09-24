@@ -1,7 +1,7 @@
 unlabeled_cases
 venv
 appeals
-.pyc
+*.pyc
 ._instructions.txt
 ._.DS_Store
 .DS_Store
