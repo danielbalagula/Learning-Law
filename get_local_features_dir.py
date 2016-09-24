@@ -11,7 +11,6 @@
 import os
 
 from first_paragraph_getter import getFirstParagraphsStopWordsRemoved
-from get_party_names import getPartyNames
 from helpers import *
 
 selfReferenceKeyWords = ["the court ", "this Court", "I ", "we ", "board", "panel", "judgement"]
@@ -25,12 +24,18 @@ def getLocalFeaturesInDir(dir):
 			textFile = open(dir + filename, 'r')
 			jsonFileName, extension = os.path.splitext(filename)
 			jsonFile = open(dir + jsonFileName + '.json', 'r')
-			getLocalFeaturesInDoc(filename, textFile.read().decode("utf8").lower(), jsonFile.read().decode("utf8").lower())
+			
+			features = getLocalFeaturesInDoc(filename, textFile.read().decode("utf8").lower(), jsonFile.read().decode("utf8").lower())
+			#outputs features to file
+			outputFileName = filename + "_features.json"
+			outputFile = open(dir+'features/'+outputFileName, "w")
+			outputFile.write(features)
+			outputFile.close()
+
 
 def getLocalFeaturesInDoc(originalFilename, textFile, jsonFile):
 	#file output format
 	fileName, extension = os.path.splitext(originalFilename)
-	outputFileName = fileName + "_features.json"	
 
 	#extracting text from document
 	parties = getPartyNames(jsonFile)
@@ -54,7 +59,7 @@ def getLocalFeaturesInDoc(originalFilename, textFile, jsonFile):
 	if firstParagraph:
 		features['party1MentionsFirstParagraph'] = firstParagraph.count(parties['party1'])
 		features['party2MentionsFirstParagraph'] = firstParagraph.count(parties['party2'])
-		features['firstParagraphPosition'] = firstParagraphInfo.get('index') / fileLength
+		features['firstParagraphPosition'] = float(firstParagraphInfo.get('index'))/ fileLength
 		features['nGramsFirstParagraph'] = getNGrams(firstParagraph, 2)
 		keyWordsPresence = {}
 		for verdictWord in verdictKeyWords:
@@ -73,7 +78,4 @@ def getLocalFeaturesInDoc(originalFilename, textFile, jsonFile):
 	else:
 		print "Could not find first paragraph in file " + originalFilename
 
-	#outputs features to file
-	outputFile = open(outputFileName, "w")
-	outputFile.write(dictToJSON(features))
-	outputFile.close()
+	return dictToJSON(features)

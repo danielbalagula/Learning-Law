@@ -36,7 +36,7 @@ def getBetweenJudgesAndIntroduction(doc):
 	if firstParagraphStopWordsRemoved == "":
 		return False 
 	else :
-		return {'content': firstParagraphStopWordsRemoved, 'index': doc.index(firstParagraph)}
+		return {'content': firstParagraphStopWordsRemoved, 'index': doc.index(firstParagraph)+len(firstParagraph)}
 
 def getBetweenTwoStrings(doc, first, last):
 	#gets any text (usually first paragraph) between text in the following format: "first (GET-THIS-TEXT) last"
@@ -49,7 +49,7 @@ def getBetweenTwoStrings(doc, first, last):
 	if firstParagraphStopWordsRemoved == "":
 		return False 
 	else :
-		return {'content': firstParagraphStopWordsRemoved, 'index': doc.index(firstParagraph)}
+		return {'content': firstParagraphStopWordsRemoved, 'index': doc.index(firstParagraph)+len(firstParagraph)}
 
 def getBetweenStringAndIndent(doc, string):
 	#gets any text in the following format "string (GET-THIS-TEXT)   "
@@ -63,7 +63,7 @@ def getBetweenStringAndIndent(doc, string):
 	if len(threeSpacesIndent) > 25:
 		firstParagraph = twoSpacesIndent
 		firstParagraphStopWordsRemoved = removeStopWords(firstParagraph)
-	return {'content': firstParagraphStopWordsRemoved, 'index': doc.index(firstParagraph)}
+	return {'content': firstParagraphStopWordsRemoved, 'index': doc.index(firstParagraph)+len(firstParagraph)}
 
 def getBeforeString(doc, string):
 	#gets any text in the following format "(GET-THIS-TEXT) string"
@@ -72,4 +72,4 @@ def getBeforeString(doc, string):
 	if firstParagraphStopWordsRemoved == "":
 		return False 
 	else :
-		return {'content': firstParagraphStopWordsRemoved, 'index': doc.index(firstParagraph)}
+		return {'content': firstParagraphStopWordsRemoved, 'index': doc.index(firstParagraph)+len(firstParagraph)}

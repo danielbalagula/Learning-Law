@@ -1,12 +1,13 @@
 import os
 import string
+import sys
 
 from get_local_features_dir import getLocalFeaturesInDir
 
 party1FilesDir = "./party1_won/"
 party2FilesDir = "./party2_won/"
 
-getLocalFeaturesInDir(party2FilesDir)
+getLocalFeaturesInDir(sys.argv[2])
 
 # party1FirstParagraphsStopWordsRemoved = getFirstParagraphsStopWordsRemoved(party1FilesPath)
 # party2FirstParagraphsStopWordsRemoved = getFirstParagraphsStopWordsRemoved(party2FilesPath)
