@@ -6,8 +6,6 @@ from get_local_features_dir import getLocalFeaturesInDir
 party1FilesDir = "./party1_won/"
 party2FilesDir = "./party2_won/"
 
-print '######################################################################################################################'
-
 getLocalFeaturesInDir(party2FilesDir)
 
 # party1FirstParagraphsStopWordsRemoved = getFirstParagraphsStopWordsRemoved(party1FilesPath)

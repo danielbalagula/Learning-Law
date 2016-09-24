@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import os
 import string
 from nltk import word_tokenize
@@ -7,7 +9,19 @@ from helpers import *
 def getFirstParagraphsStopWordsRemoved(doc):
 	#returns the first paragraph from a text.. tries methods from most to least accurate retrieval
 	doc = doc.lower()
-	return getBetweenJudgesAndIntroduction(doc) or getBetweenTwoWords(doc, 'introduction', 'background') or getBetweenOpinionIndent(doc) or getBetweenTwoWords(doc, '', 'i.')
+	return False \
+	or getBetweenJudgesAndIntroduction(doc) \
+	or getBetweenTwoStrings(doc, 'i.', 'ii.') \
+	or getBetweenTwoStrings(doc, '1.', '2.') \
+	or getBetweenTwoStrings(doc, '[1].', '[2]') \
+	or getBetweenTwoStrings(doc, '¶1', '¶2') \
+	or getBetweenTwoStrings(doc, 'introduction', 'background') \
+	or getBetweenTwoStrings(doc, 'introduction', 'facts') \
+	or getBetweenTwoStrings(doc, 'opinion', 'background') \
+	or getBeforeString(doc,'i.') \
+	or getBetweenStringAndIndent(doc, 'introduction') \
+	or getBeforeString(doc,'background') \
+	or getBetweenStringAndIndent(doc, 'opinion') \
 
 def getBetweenJudgesAndIntroduction(doc):
 	#gets any text (usually first paragraph) between text in the following format: "Before A, B, C Judges. (GET-THIS-TEXT) I."
@@ -17,38 +31,45 @@ def getBetweenJudgesAndIntroduction(doc):
 	if currentJudgeListLine != "":
 		currentFirstParagraph = findBetween(doc, currentJudgeListLine+'judges.', 'i.')
 		if currentFirstParagraph != "":
-			firstParagraph = currentFirstParagraph
-	
-	punctuationSet = set(string.punctuation)
-	#removed_punctuation = s = ''.join(ch for ch in firstParagraph if ch not in punctuationSet)
+			firstParagraph = currentFirstParagraph	
 	firstParagraphStopWordsRemoved = removeStopWords(firstParagraph)
 	if firstParagraphStopWordsRemoved == "":
 		return False 
 	else :
-		return firstParagraphStopWordsRemoved
+		return {'content': firstParagraphStopWordsRemoved, 'index': doc.index(firstParagraph)}
 
-def getBetweenTwoWords(doc, first, last):
+def getBetweenTwoStrings(doc, first, last):
 	#gets any text (usually first paragraph) between text in the following format: "first (GET-THIS-TEXT) last"
 	#returns paragraphs with stopwords removed
 	firstParagraph = ""
 	currentFirstParagraph = findBetween(doc, first, last)
 	if currentFirstParagraph != "":
 		firstParagraph = currentFirstParagraph
-	
-	punctuationSet = set(string.punctuation)
-	#removed_punctuation = s = ''.join(ch for ch in firstParagraph if ch not in punctuationSet)
 	firstParagraphStopWordsRemoved = removeStopWords(firstParagraph)
 	if firstParagraphStopWordsRemoved == "":
 		return False 
 	else :
-		return firstParagraphStopWordsRemoved
+		return {'content': firstParagraphStopWordsRemoved, 'index': doc.index(firstParagraph)}
 
-def getBetweenOpinionIndent(doc):
+def getBetweenStringAndIndent(doc, string):
+	#gets any text in the following format "string (GET-THIS-TEXT)   "
 	firstParagraph = ""
-	twoSpacesIndent = findBetween(doc, "opinion", "  ")
-	if len(twoSpacesIndent) > 10:
-		return twoSpacesIndent
-	threeSpacesIndent = findBetween(doc, "opinion", "   ")
-	if len(threeSpacesIndent) > 10:
-		return twoSpacesIndent
-	return False
+	firstParagraphStopWordsRemoved = ""
+	twoSpacesIndent = findBetween(doc, string, "  ")
+	if len(twoSpacesIndent) > 25:
+		firstParagraph = twoSpacesIndent
+		firstParagraphStopWordsRemoved = removeStopWords(firstParagraph)
+	threeSpacesIndent = findBetween(doc, string, "   ")
+	if len(threeSpacesIndent) > 25:
+		firstParagraph = twoSpacesIndent
+		firstParagraphStopWordsRemoved = removeStopWords(firstParagraph)
+	return {'content': firstParagraphStopWordsRemoved, 'index': doc.index(firstParagraph)}
+
+def getBeforeString(doc, string):
+	#gets any text in the following format "(GET-THIS-TEXT) string"
+	currentFirstParagraph = findBetween(doc, "", string)
+	firstParagraphStopWordsRemoved = removeStopWords(currentFirstParagraph)
+	if firstParagraphStopWordsRemoved == "":
+		return False 
+	else :
+		return {'content': firstParagraphStopWordsRemoved, 'index': doc.index(firstParagraph)}

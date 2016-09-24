@@ -2,7 +2,10 @@
 	# partyMentionsCountWholeDocument: counts the number of times a party was mentioned in a file
 	# nGramsFirstParagraph: a list of all n-grams in the first paragraph in a document
 	# partyMentionsCountFirstParagraph: counts the number of times a party was mentioned in the first paragraph
-	# lastSentenceKeyWords: checks for the presence of keywords in the last sentence of the first paragraph
+	# keyWordsPresence: checks for the presence of keywords in the last sentence of the first paragraph
+		# if keyWordsPresence are all false, checks first paragraph
+	# firstParagraphPosition: position of last sentence in first paragraph relative to whole document
+	# lastSentencePosition: position of last sentence in first paragraph relative to whole document
 	# appellee: the party that is appealing
 
 import os
@@ -11,7 +14,8 @@ from first_paragraph_getter import getFirstParagraphsStopWordsRemoved
 from get_party_names import getPartyNames
 from helpers import *
 
-verdictKeyWords = ['affirm', 'reverse', 'reject']
+selfReferenceKeyWords = ["the court ", "this Court", "I ", "we ", "board", "panel", "judgement"]
+verdictKeyWords = ["grant", "reverse", "reject", "ordered", "denied", "affirm", "dismiss", "conclude"]
 firstParagraphKeyWords = ['appeals']
 
 def getLocalFeaturesInDir(dir):
@@ -26,11 +30,12 @@ def getLocalFeaturesInDir(dir):
 def getLocalFeaturesInDoc(originalFilename, textFile, jsonFile):
 	#file output format
 	fileName, extension = os.path.splitext(originalFilename)
-	outputFileName = fileName + "_features.csv"
+	outputFileName = fileName + "_features.json"	
 
 	#extracting text from document
 	parties = getPartyNames(jsonFile)
-	firstParagraph = getFirstParagraphsStopWordsRemoved(textFile)
+	firstParagraphInfo = getFirstParagraphsStopWordsRemoved(textFile)
+	firstParagraph = firstParagraphInfo.get('content')
 	if firstParagraph:
 		firstParagraphSentences = getSentences(firstParagraph)
 		lastSentenceFirstParagraph = ""
@@ -39,23 +44,36 @@ def getLocalFeaturesInDoc(originalFilename, textFile, jsonFile):
 		except:
 			pass
 
+	#commonly used variables
+	fileLength = len(textFile)
+	features = {}
+
 	#extracting features from text
-	partyMentionsCountWholeDocument = {'party1': textFile.count(parties['party1']), 'party2': textFile.count(parties['party2'])}
+	features['party1MentionsWholeDocument'] = textFile.count(parties['party1'])
+	features['party2MentionsWholeDocument'] = textFile.count(parties['party2'])
 	if firstParagraph:
-		nGramsFirstParagraph = getNGrams(firstParagraph, 2)
-		partyMentionsCountFirstParagraph = {'party1': firstParagraph.count(parties['party1']), 'party2': firstParagraph.count(parties['party2'])}
-		lastSentenceKeyWords = {}
-		for keyWord in verdictKeyWords:
-			lastSentenceKeyWords[keyWord] = keyWord in lastSentenceFirstParagraph
-		appellee = ""
+		features['party1MentionsFirstParagraph'] = firstParagraph.count(parties['party1'])
+		features['party2MentionsFirstParagraph'] = firstParagraph.count(parties['party2'])
+		features['firstParagraphPosition'] = firstParagraphInfo.get('index') / fileLength
+		features['nGramsFirstParagraph'] = getNGrams(firstParagraph, 2)
+		keyWordsPresence = {}
+		for verdictWord in verdictKeyWords:
+			for selfWord in selfReferenceKeyWords:
+				if selfWord in textFile and verdictWord in textFile and abs(textFile.index(selfWord) - textFile.index(verdictWord) < 5):
+					keyWordsPresence["_"+verdictWord] = verdictWord in firstParagraph
+			keyWordsPresence[verdictWord] = verdictWord in lastSentenceFirstParagraph
+		features['keyWordsPresence'] = keyWordsPresence
 		for sentence in firstParagraphSentences:
 			if parties['party1'] in sentence and 'appeals' in sentence:
-				appellee = 'party1'
+				features['appellee'] = 'party1'
 				break
 			elif parties['party2'] in sentence and 'appeals' in sentence:
-				appellee = 'party2'
+				features['appellee'] = 'party2'
 				break
-		print fileName + " = " + appellee
+	else:
+		print "Could not find first paragraph in file " + originalFilename
 
-def getGlobalFeaturesInDir(dir):
-	return
+	#outputs features to file
+	outputFile = open(outputFileName, "w")
+	outputFile.write(dictToJSON(features))
+	outputFile.close()

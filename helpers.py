@@ -1,6 +1,8 @@
 import collections
-from itertools import islice
+import json
 import operator
+import string
+from itertools import islice
 
 from nltk.corpus import stopwords
 from nltk import word_tokenize
@@ -63,7 +65,7 @@ def getGlobalNGrams(docs):
 						combinedNGrams[nGram] += 1
 	return combinedNGrams
 
-def getTFIDF(docs):
+def getTFIDF(docs, topAmount):
 	#gets tf-idf values for words in docs and returns them as a key-value pair of word and score
 	tfidf = TfidfVectorizer()
 	tfs = tfidf.fit_transform(docs)
@@ -72,7 +74,7 @@ def getTFIDF(docs):
 	for i in range(0, len(feature_names)):
 		if (stringHasNumbers(feature_names[i]) == False):
 			scores[feature_names[i]] = (tfs[0, i])
-	return scores
+	return scores.sort(reverse=True)[topAmount]
 
 def dictionarySortByValue(dict, topReturned, order):
 	#sorts a dictionary based on the values
@@ -91,9 +93,14 @@ def adequateWord(word):
 	#checks to see if the word should be considered for data
 	return stringHasNumbers(word) == False and len(word) > 2
 
-def getNGrams(input_list, n):
+def getNGrams(text, n):
 	#returns all the n-grams in a string length n
+	input_list = word_tokenize(removePunctuation(text))
 	return zip(*[input_list[i:] for i in range(n)])
+
+def removePunctuation(text):
+	punctuationSet = set(string.punctuation)
+	return ''.join(ch for ch in text if ch not in punctuationSet)
 
 def getSentences(text):
 	#returns a list of sentences tokenized by Punkt
@@ -102,3 +109,6 @@ def getSentences(text):
 	sentence_splitter = PunktSentenceTokenizer(punkt_param)
 	sentences = sentence_splitter.tokenize(text)
 	return sentences
+
+def dictToJSON(dict):
+	return json.dumps(dict, ensure_ascii=True)
