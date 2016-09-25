@@ -33,7 +33,6 @@ def getLocalFeaturesInDir(dir):
 			outputFile.write(features)
 			outputFile.close()
 
-
 def getLocalFeaturesInDoc(originalFilename, textFile, jsonFile):
 	#file output format
 	fileName, extension = os.path.splitext(originalFilename)

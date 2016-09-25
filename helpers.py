@@ -35,46 +35,6 @@ def findBetween(s, first, last ):
 	except ValueError:
 		return ""
 
-def getGlobalBagOfWords(docs):
-	#gets the counts for all bags of words across documents
-	bagOfWordsArray = []
-	combinedBagOfWords = {}
-	for doc in docs:
-		currentBOW = []
-		for word in doc.split():
-			if word not in currentBOW:
-				currentBOW.append(word)
-		bagOfWordsArray.append(currentBOW)
-	for i in range(len(bagOfWordsArray)):
-		for word in bagOfWordsArray[i]:
-			if word not in combinedBagOfWords and adequateWord(word):
-				combinedBagOfWords[word] = 0
-				j = i+1
-				for j in range(len(bagOfWordsArray)):
-					if word in bagOfWordsArray[j]:
-						combinedBagOfWords[word] += 1
-	return combinedBagOfWords
-
-def getGlobalNGrams(docs):
-	#gets the counts for all n-grams across documents
-	nGramsArray = []
-	combinedNGrams = {}
-	for doc in docs:
-		currentNGrams = []
-		for nGram in find_ngrams(doc.split(),2):
-			if nGram not in currentNGrams:
-				currentNGrams.append(' '.join(nGram))
-		nGramsArray.append(currentNGrams)
-	for i in range(len(nGramsArray)):
-		for nGram in nGramsArray[i]:
-			if nGram not in combinedNGrams and adequateWord(nGram):
-				combinedNGrams[nGram] = 0
-				j = i+1
-				for j in range(len(nGramsArray)):
-					if nGram in nGramsArray[j]:
-						combinedNGrams[nGram] += 1
-	return combinedNGrams
-
 def getTFIDF(docs, topAmount):
 	#gets tf-idf values for words in docs and returns them as a key-value pair of word and score
 	tfidf = TfidfVectorizer()
@@ -110,7 +70,16 @@ def getNGrams(text, n):
 
 def removePunctuation(text):
 	punctuationSet = set(string.punctuation)
-	return ''.join(ch for ch in text if ch not in punctuationSet)
+	outputString = ''
+	ignoreAfterApostrophe = False
+	for ch in text:
+		if ch == '\'':
+			ignoreAfterApostrophe = True
+		elif ignoreAfterApostrophe:
+			ignoreAfterApostrophe = False
+		elif ch not in punctuationSet:
+			outputString += ch
+	return outputString
 
 def getSentences(text):
 	#returns a list of sentences tokenized by Punkt
