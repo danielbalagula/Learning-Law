@@ -16,6 +16,7 @@ Make sure there is a '/features/' subdirectory, as this is the place where the o
 
 ```
 python get_local_features.py [directory]
+python get_global_features.py [directory]
 ```
 
 This will generate .json files [directory/features] that have the following names: '[file-name]_features.json'
@@ -23,8 +24,6 @@ This will generate .json files [directory/features] that have the following name
 ##Local Features
 
 The following features are either implemented or are being on planned later:
-
- 	[Implemented] Bag of Words
 
 	[Implemented] N-grams 
 
@@ -42,8 +41,6 @@ The following features are either implemented or are being on planned later:
 
 
 ##Global Features
-
-	Most common words in bags of words
 
 	Most common n-grams
 

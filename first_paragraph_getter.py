@@ -32,11 +32,10 @@ def getBetweenJudgesAndIntroduction(doc):
 		currentFirstParagraph = findBetween(doc, currentJudgeListLine+'judges.', 'i.')
 		if currentFirstParagraph != "":
 			firstParagraph = currentFirstParagraph	
-	firstParagraphStopWordsRemoved = removeStopWords(firstParagraph)
-	if firstParagraphStopWordsRemoved == "":
+	if firstParagraph == "":
 		return False 
 	else :
-		return {'content': firstParagraphStopWordsRemoved, 'index': doc.index(firstParagraph)+len(firstParagraph)}
+		return {'content': firstParagraph, 'index': doc.index(firstParagraph)+len(firstParagraph)}
 
 def getBetweenTwoStrings(doc, first, last):
 	#gets any text (usually first paragraph) between text in the following format: "first (GET-THIS-TEXT) last"
@@ -46,10 +45,10 @@ def getBetweenTwoStrings(doc, first, last):
 	if currentFirstParagraph != "":
 		firstParagraph = currentFirstParagraph
 	firstParagraphStopWordsRemoved = removeStopWords(firstParagraph)
-	if firstParagraphStopWordsRemoved == "":
+	if firstParagraph == "":
 		return False 
 	else :
-		return {'content': firstParagraphStopWordsRemoved, 'index': doc.index(firstParagraph)+len(firstParagraph)}
+		return {'content': firstParagraph, 'index': doc.index(firstParagraph)+len(firstParagraph)}
 
 def getBetweenStringAndIndent(doc, string):
 	#gets any text in the following format "string (GET-THIS-TEXT)   "
@@ -62,14 +61,12 @@ def getBetweenStringAndIndent(doc, string):
 	threeSpacesIndent = findBetween(doc, string, "   ")
 	if len(threeSpacesIndent) > 25:
 		firstParagraph = twoSpacesIndent
-		firstParagraphStopWordsRemoved = removeStopWords(firstParagraph)
-	return {'content': firstParagraphStopWordsRemoved, 'index': doc.index(firstParagraph)+len(firstParagraph)}
+	return {'content': firstParagraph, 'index': doc.index(firstParagraph)+len(firstParagraph)}
 
 def getBeforeString(doc, string):
 	#gets any text in the following format "(GET-THIS-TEXT) string"
 	currentFirstParagraph = findBetween(doc, "", string)
-	firstParagraphStopWordsRemoved = removeStopWords(currentFirstParagraph)
-	if firstParagraphStopWordsRemoved == "":
+	if currentFirstParagraph == "":
 		return False 
 	else :
-		return {'content': firstParagraphStopWordsRemoved, 'index': doc.index(firstParagraph)+len(firstParagraph)}
+		return {'content': firstParagraph, 'index': doc.index(firstParagraph)+len(firstParagraph)}

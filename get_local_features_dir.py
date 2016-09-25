@@ -41,8 +41,10 @@ def getLocalFeaturesInDoc(originalFilename, textFile, jsonFile):
 	parties = getPartyNames(jsonFile)
 	firstParagraphInfo = getFirstParagraphsStopWordsRemoved(textFile)
 	firstParagraph = firstParagraphInfo.get('content')
+	firstParagraphWordsList = []
 	if firstParagraph:
 		firstParagraphSentences = getSentences(firstParagraph)
+		firstParagraphWordsList = wordTokenize(firstParagraph)
 		lastSentenceFirstParagraph = ""
 		try:
 			lastSentenceFirstParagraph = firstParagraphSentences[-1]
@@ -52,6 +54,7 @@ def getLocalFeaturesInDoc(originalFilename, textFile, jsonFile):
 	#commonly used variables
 	fileLength = len(textFile)
 	features = {}
+	firstParagraph = removeStopWords(firstParagraphWordsList)
 
 	#extracting features from text
 	features['party1MentionsWholeDocument'] = textFile.count(parties['party1'])

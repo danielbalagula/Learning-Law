@@ -20,10 +20,12 @@ def getPartyNames(doc):
 		parties['party2'] = findBetween(caseNameString, "v.", "ENDNAME")
 	return parties
 
-def removeStopWords(text):
+def removeStopWords(tokens):
 	#removes stop words from a string
-	tokens = word_tokenize(text)
 	return ' '.join([word for word in tokens if word not in stopwords.words('english')])
+
+def wordTokenize(text):
+	return word_tokenize(text)
 
 
 def findBetween(s, first, last ):
