@@ -16,6 +16,14 @@ from helpers import *
 selfReferenceKeyWords = ["the court ", "this Court", "I ", "we ", "board", "panel", "judgement"]
 verdictKeyWords = ["grant", "reverse", "reject", "ordered", "denied", "affirm", "dismiss", "conclude"]
 firstParagraphKeyWords = ['appeals']
+localFeatureNames = ['appellee', 'firstParagraphPosition', 'keyWordsPresence', 'nGramsFirstParagraph', \
+ 'party1MentionsFirstParagraph','party1MentionsWholeDocument', 'party2MentionsFirstParagraph', 'party2MentionsWholeDocument']
+
+def getVerdictKeyWords():
+	return verdictKeyWords
+
+def getLocalFeatureNames():
+	return localFeatureNames
 
 def getLocalFeaturesInDir(dir):
 	#goes through all possible .txt and .json files in a directory to get features
@@ -68,9 +76,12 @@ def getLocalFeaturesInDoc(originalFilename, textFile, jsonFile):
 		for verdictWord in verdictKeyWords:
 			for selfWord in selfReferenceKeyWords:
 				if selfWord in textFile and verdictWord in textFile and abs(textFile.index(selfWord) - textFile.index(verdictWord) < 5):
-					keyWordsPresence["_"+verdictWord] = verdictWord in firstParagraph
+					keyWordsPresence["_"+verdictWord] = True
+				else:
+					if "_"+verdictWord not in keyWordsPresence:
+						keyWordsPresence["_"+verdictWord] = False
 			keyWordsPresence[verdictWord] = verdictWord in lastSentenceFirstParagraph
-		features['keyWordsPresence'] = keyWordsPresence
+		features['keyWordsPresence'] = dictionarySortByKey(keyWordsPresence)
 		for sentence in firstParagraphSentences:
 			if parties['party1'] in sentence and 'appeals' in sentence:
 				features['appellee'] = 'party1'
@@ -78,7 +89,9 @@ def getLocalFeaturesInDoc(originalFilename, textFile, jsonFile):
 			elif parties['party2'] in sentence and 'appeals' in sentence:
 				features['appellee'] = 'party2'
 				break
+			else:
+				features['appellee'] = "none"
 	else:
 		print "Could not find first paragraph in file " + originalFilename
 
-	return dictToJSON(features)
+	return dictToJSON(dictionarySortByKey(features))

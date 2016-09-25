@@ -57,6 +57,9 @@ def dictionarySortByValue(dict, topReturned, order):
 		orderedList = sorted(dict.items(), key=operator.itemgetter(1))
 	return orderedList[:topReturned]
 
+def dictionarySortByKey(dict):
+	return collections.OrderedDict(sorted(dict.items()))
+
 def stringHasNumbers(inputString):
 	#checks to see if a string has digits in it
 	return any(char.isdigit() for char in inputString)
