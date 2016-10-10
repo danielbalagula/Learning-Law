@@ -1,5 +1,5 @@
 import os
-import json
+import simplejson as json
 
 from helpers import *
 
@@ -10,6 +10,7 @@ globalFeatures = {}
 def getGlobalFeaturesInDir(dir):
 	for filename in os.listdir(dir):
 		if filename.endswith('json'):
+			print filename
 			currentFile = json.loads(open(dir+filename, "r").read())
 			try:
 				getGlobalNGrams(currentFile['nGramsFirstParagraph'])

@@ -14,7 +14,7 @@ outputFile = open(outputFileName, 'w')
 verdictKeyWords = getVerdictKeyWords()
 verdictKeyWords.sort()
 
-for feature in getLocalFeatureNames():
+for feature in getLocalFeatureNames(): #Sets the labels for the csv file
 	if feature == 'keyWordsPresence':
 		for keyWord in verdictKeyWords:
 			outputFile.write('_'+keyWord+',')
@@ -25,13 +25,16 @@ for feature in getLocalFeatureNames():
 
 outputFile.write('\n')
 
-for filename in os.listdir(dir):
+for filename in os.listdir(dir): #Gets the information from the feature files
 	if filename.endswith('.json') and filename != 'globalFeatures.json':
 		currentDoc = open(dir+filename, 'r').read()
 		features = dictionarySortByKey(json.loads(currentDoc))
-		print features
 		for key, value in features.iteritems():
-			if (key != u'nGramsFirstParagraph'):
+			if (key == 'keyWordsPresence'):
+				for keyWord, presence in dictionarySortByKey(value).iteritems():
+					print keyWord
+					outputFile.write(str(presence)+',')
+			elif (key != u'nGramsFirstParagraph'):
 				print key
 				outputFile.write(str(value)+',')
 	outputFile.write('\n')
