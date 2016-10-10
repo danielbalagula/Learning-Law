@@ -8,7 +8,7 @@ from helpers import *
 
 dir = (sys.argv[1]+'/')
 
-outputFileName = 'data.csv'
+outputFileName = (sys.argv[2])
 outputFile = open(outputFileName, 'w')
 
 verdictKeyWords = getVerdictKeyWords()

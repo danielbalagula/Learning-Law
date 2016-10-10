@@ -21,6 +21,12 @@ python get_global_features.py [directory]
 
 This will generate .json files [directory/features] that have the following names: '[file-name]_features.json'
 
+After, export the features to a .csv file using
+
+```
+python export_to_csv.py [directory] [output_file_name]
+```
+
 ##Local Features
 
 The following features are either implemented or are being on planned later:

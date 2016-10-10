@@ -77,9 +77,8 @@ def getLocalFeaturesInDoc(originalFilename, textFile, jsonFile):
 			for selfWord in selfReferenceKeyWords:
 				if selfWord in textFile and verdictWord in textFile and abs(textFile.index(selfWord) - textFile.index(verdictWord) < 5):
 					keyWordsPresence["_"+verdictWord] = True
-				else:
-					if "_"+verdictWord not in keyWordsPresence:
-						keyWordsPresence["_"+verdictWord] = False
+				elif "_"+verdictWord not in keyWordsPresence:
+					keyWordsPresence["_"+verdictWord] = False
 			keyWordsPresence[verdictWord] = verdictWord in lastSentenceFirstParagraph
 		features['keyWordsPresence'] = dictionarySortByKey(keyWordsPresence)
 		for sentence in firstParagraphSentences:
