@@ -1,0 +1,8 @@
+appellee,firstParagraphPosition,_affirm,_conclude,_denied,_dismiss,_grant,_ordered,_reject,_reverse,affirm,conclude,denied,dismiss,grant,ordered,reject,reverse,party1MentionsFirstParagraph,party1MentionsWholeDocument,party2MentionsFirstParagraph,party2MentionsWholeDocument,board veterans,appeals counsel,appeals board,veterans appeals,usc §,judge veteran,decision board,secretary filed,moorman judge,panel decision,
+party1,0.0874011857708,True,True,True,False,True,False,True,True,False,False,False,False,False,False,False,True,2,17,0,10,True,True,True,True,False,True,True,False,True,True,False,
+none,0.0440660749268,False,True,True,True,True,True,False,False,False,False,False,False,False,False,False,False,4,44,0,1,False,False,False,False,True,False,False,True,False,True,
+party1,0.137927979802,False,True,True,False,True,False,True,True,False,False,False,False,False,False,False,False,4,22,0,2,True,True,True,True,False,True,True,False,False,True,
+party1,0.0557386548839,True,False,True,False,False,False,True,True,False,False,False,False,False,False,False,True,1,26,0,7,True,True,True,True,False,True,True,True,False,False,False,
+
+none,0.114902333017,True,True,True,False,True,False,True,False,False,False,False,False,True,False,False,False,2,4,0,2,True,True,True,True,True,False,False,True,True,True,
+none,0.0801712636902,False,True,True,False,True,False,False,False,False,False,False,False,True,False,False,False,0,3,0,2,False,False,False,False,True,True,False,False,True,True,False,

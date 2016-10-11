@@ -1,5 +1,5 @@
 import os
-import simplejson as json
+import json
 
 from helpers import *
 
@@ -10,13 +10,13 @@ globalFeatures = {}
 def getGlobalFeaturesInDir(dir):
 	for filename in os.listdir(dir):
 		if filename.endswith('json'):
-			print filename
 			currentFile = json.loads(open(dir+filename, "r").read())
 			try:
 				getGlobalNGrams(currentFile['nGramsFirstParagraph'])
 			except KeyError:
 				pass
-	globalFeatures['nGrams'] = dictionarySortByValue(combinedNGrams, len(combinedNGrams), "descending")
+	globalFeatures['nGrams'] = dictionarySortByValue(combinedNGrams, 10, "descending")
+	print globalFeatures['nGrams']
 	outputFile = open(dir+outputFileName, "w")
 	outputFile.write(dictToJSON(globalFeatures))
 	outputFile.close()
