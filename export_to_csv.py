@@ -41,6 +41,7 @@ for filename in os.listdir(dir): #Gets the information from the feature files
 					outputFile.write(str(presence)+',')
 			elif (key != u'nGramsFirstParagraph'):
 				outputFile.write(str(value)+',')
+		#TBD: use sets
 		for globalNgram in globalNgrams:
 			currently_found = False	
 			try:

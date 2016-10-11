@@ -50,6 +50,16 @@ The following features are either implemented or are being on planned later:
 
 	Most common n-grams
 
+##TBD
+
+	Use set intersection instead of iteration for presence of keywords
+
+	Use .IE format instead of .json
+
+	Modularize more logically (export_to_csv shouldn't be done a lot of computational work)
+
+	Compile all actions into one centralized program
+
 ##Papers to look at
 	
 	http://jurix.nl/pdf/j04-05.pdf

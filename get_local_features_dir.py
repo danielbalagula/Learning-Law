@@ -73,12 +73,16 @@ def getLocalFeaturesInDoc(originalFilename, textFile, jsonFile):
 		features['firstParagraphPosition'] = float(firstParagraphInfo.get('index'))/ fileLength
 		features['nGramsFirstParagraph'] = getNGrams(firstParagraph, 2)
 		keyWordsPresence = {}
+		#TBD: use sets
 		for verdictWord in verdictKeyWords:
 			for selfWord in selfReferenceKeyWords:
+				#checks for keyword in whole file, uses '_keyword' to differentiate with looking only at the first paragraph
 				if selfWord in textFile and verdictWord in textFile and abs(textFile.index(selfWord) - textFile.index(verdictWord) < 5):
 					keyWordsPresence["_"+verdictWord] = True
 				elif "_"+verdictWord not in keyWordsPresence:
 					keyWordsPresence["_"+verdictWord] = False
+			#checks for keyword in last sentence of first paragraph
+			#TBD: look into checking for keyword in all of first paragraph 
 			keyWordsPresence[verdictWord] = verdictWord in lastSentenceFirstParagraph
 		features['keyWordsPresence'] = dictionarySortByKey(keyWordsPresence)
 		for sentence in firstParagraphSentences:
